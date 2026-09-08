@@ -1,0 +1,7 @@
+# Generated folders
+venv
+data
+
+# Generated files
+*.pyc
+*.log
