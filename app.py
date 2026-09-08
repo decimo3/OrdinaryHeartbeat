@@ -1,4 +1,5 @@
 ''' Script to register heartbeat log from applications, worksheets and dashboards '''
+from datetime import datetime, timedelta
 from flask import Flask, request
 from dba import Database
 from jwt import Heartbeat
@@ -28,5 +29,8 @@ def register():
         creator_ver=json_data['creator_ver'],
     )
     with Database() as database:
-        database.register_heartbeat(heartbeat)
+        tolerance = datetime.now() + timedelta(seconds=-10)
+        heartbeats = database.retrieve_heartbeat(request.remote_addr)
+        if not heartbeats or heartbeats[0].created_at < tolerance:
+            database.register_heartbeat(heartbeat)
     return 'OK', 201
