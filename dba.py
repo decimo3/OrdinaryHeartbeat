@@ -25,11 +25,14 @@ class Database:
         )
         self.connection.autocommit = True
 
-    def retrieve_heartbeat(self) -> list[Heartbeat]:
+    def retrieve_heartbeat(self, ip: str = '') -> list[Heartbeat]:
         ''' Function to retrieve all heartbeat data from database '''
         heartbeats: list[Heartbeat] = []
         with self.connection.cursor() as cursor:
-            cursor.execute('SELECT identifier, created_at, created_by, creator_ip, creator_ver FROM heartbeat')
+            sql = 'SELECT identifier, created_at, created_by, creator_ip, creator_ver FROM heartbeat'
+            sql = sql + ' WHERE creator_ip = ?' if ip else ''
+            sql += ' ORDER BY identifier DESC LIMIT 1000'
+            cursor.execute(sql, (ip,) if ip else ())
             while True:
                 row = cursor.fetchone()
                 if row is None:
