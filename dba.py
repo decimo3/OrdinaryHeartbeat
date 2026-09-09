@@ -30,7 +30,7 @@ class Database:
         heartbeats: list[Heartbeat] = []
         with self.connection.cursor() as cursor:
             sql = 'SELECT identifier, created_at, created_by, creator_ip, creator_ver FROM heartbeat'
-            sql = sql + ' WHERE creator_ip = ?' if ip else ''
+            sql += ' WHERE creator_ip = ?' if ip else ''
             sql += ' ORDER BY identifier DESC LIMIT 1000'
             cursor.execute(sql, (ip,) if ip else ())
             while True:
