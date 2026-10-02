@@ -36,7 +36,7 @@ def register():
         creator_ver=json_data['creator_ver'],
     )
     with Database() as database:
-        tolerance = datetime.now() + timedelta(seconds=-10)
+        tolerance = datetime.now() + timedelta(minutes=-1)
         heartbeats = database.retrieve_heartbeat(request.remote_addr)
         if not heartbeats or heartbeats[0].created_at < tolerance:
             database.register_heartbeat(heartbeat)
