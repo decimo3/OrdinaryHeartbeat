@@ -15,6 +15,7 @@ let
             Headers = [#"Content-Type" = "application/json"],
             Content = jsonPayload
         ]
-    )
+    ),
+    ItsOk = Text.FromBinary(httpResponse) = "OK"
 in
-    httpResponse
+    ItsOk
